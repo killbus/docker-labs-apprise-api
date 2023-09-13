@@ -1,0 +1,37 @@
+---
+version: "2.1"
+services:
+  apprise-api:
+    image: lscr.io/linuxserver/apprise-api:latest
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "3"
+      driver: json-file
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+    networks:
+      proxy:
+    volumes:
+      - ./config:/config
+      - ./run:/etc/s6-overlay/s6-rc.d/svc-apprise/run
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.apprise-api.loadbalancer.server.port=8000"
+      - "traefik.http.routers.apprise-api.rule=Host(`notify.app.laifuying.com`)"
+      - "traefik.http.routers.apprise-api.entrypoints=https"
+      - "traefik.http.routers.apprise-api.tls=true"
+      - "traefik.http.routers.apprise-api.tls.options=default"
+      - "traefik.http.routers.apprise-api.tls.certResolver=cloudflare"
+      - "traefik.http.routers.apprise-api.middlewares=auth-ying"
+      - "traefik.http.routers.apprise-api-insecure.entrypoints=http"
+      - "traefik.http.routers.apprise-api-insecure.rule=Host(`notify.app.laifuying.com`)"
+      - "traefik.http.routers.apprise-api-insecure.middlewares=redirecthttps"
+      - 'traefik.docker.network=proxy'
+
+networks:
+  proxy:
+    external: true
