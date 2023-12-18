@@ -16,7 +16,6 @@ services:
       proxy:
     volumes:
       - ./config:/config
-      - ./run:/etc/s6-overlay/s6-rc.d/svc-apprise/run
     restart: always
     labels:
       - "traefik.enable=true"
