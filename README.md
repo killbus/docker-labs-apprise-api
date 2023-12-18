@@ -9,7 +9,11 @@ curl -X POST -d '{"body":"test message"}'  -H "Content-Type: application/json" l
 ```
 
 ```
-curl -X POST -H "Content-Type: application/json" localhost:8000/notify/apprise/?tag=tgmd" -d @- <<EOF
+curl -X POST -d '{"body":"test message"}'  -H "Content-Type: application/json" localhost:8000/notify/apprise/?tag=tgtxt,tgmd
+```
+
+```
+curl -X POST -H "Content-Type: application/json" "localhost:8000/notify/apprise/?tag=tgmd" -d @- <<EOF
 {
     "body": "test message"
 }
